@@ -81,7 +81,7 @@
 
 		<script src="bkcore.coffee/controllers/TouchController.js"></script>
 		<script src="bkcore.coffee/controllers/OrientationController.js"></script>
-
+    <script src="bkcore.coffee/controllers/GamepadController.js"></script>
 		<script src="bkcore/Timer.js"></script>
 		<script src="bkcore/ImageData.js"></script>
 		<script src="bkcore/Utils.js"></script>
@@ -159,6 +159,7 @@
 				});
 			}
 
+      var receivedEchoACK = false;
 			function receiveMessage(event) {
 				var msg = JSON.parse(event.data);
 				if (gameover.style.display == 'block') {
@@ -169,11 +170,31 @@
 				  q = msg.quality;
 				  c = msg.controlType;
 				  window.touchableWidth = msg.touchableWidth;
-				  start();
+          start();
+
+       //   pollOpenerWindow();
         }
         if (msg.cmd == "stop") {
           window.close();
         }
+
+        if (msg.cmd == "echoACK") {
+          console.log("receive echo ack from opener");
+          receivedEchoACK = true;
+        }
+      }
+
+      function pollOpenerWindow() {
+        setTimeout(function() {
+          if (receivedEchoACK) {
+            receivedEchoACK = false;
+            window.opener.postMessage("echo", "*");
+            pollOpenerWindow();
+          } else {
+            // close this window if no echo ack is received.
+            window.close();
+          }
+        }, 3000);
       }
 
       window.addEventListener("message", receiveMessage, false);
