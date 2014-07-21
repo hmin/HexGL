@@ -120,6 +120,7 @@ bkcore.hexgl.ShipControls = function(ctx)
 
 	this.touchController = null;
 	this.orientationController = null;
+    this.gamepadController = null;
 
 	if(ctx.controlType == 1 && bkcore.controllers.TouchController.isCompatible())
 	{
@@ -153,6 +154,22 @@ bkcore.hexgl.ShipControls = function(ctx)
 					self.key.forward = true;
 			});
 	}
+	else if(ctx.controlType == 3 && bkcore.controllers.GamepadController.isCompatible())
+    {
+        this.gamepadController = new bkcore.controllers.GamepadController(
+            function(controller){
+                if (controller.select)
+                    ctx.restart();
+                else {
+                    self.key.forward = controller.acceleration > 0;
+                    self.key.ltrigger = controller.ltrigger > 0;
+                    self.key.rtrigger = controller.rtrigger > 0;
+                    self.key.left = controller.lstickx < -0.1;
+                    self.key.right = controller.lstickx > 0.1;
+                }
+            }
+        );
+    }
 
 	function onKeyDown(event) 
 	{
@@ -290,6 +307,11 @@ bkcore.hexgl.ShipControls.prototype.update = function(dt)
       angularAmount -= this.orientationController.beta/45 * this.airAngularSpeed * dt;
 		  rollAmount += this.orientationController.beta/45 * this.rollAngle;
     }
+	}
+    if(this.gamepadController != null && this.gamepadController.updateAvailable())
+	{
+		angularAmount -= this.gamepadController.lstickx * this.angularSpeed * dt;
+		rollAmount += this.gamepadController.lstickx * this.rollAngle;
 	}
 
 	if(this.key.forward)
