@@ -150,7 +150,7 @@ bkcore.hexgl.Gameplay.prototype.start = function(opts)
 	if(this.hud != null)
 	{
 		this.hud.resetTime();
-		this.hud.display("Get ready", 1);
+		this.hud.display("Start", 1);
 		this.hud.updateLap(this.lap, this.maxLaps);
 	}
 }

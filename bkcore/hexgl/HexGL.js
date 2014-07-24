@@ -103,6 +103,7 @@ bkcore.hexgl.HexGL.prototype.start = function()
 		raf();
 
 	this.initGameplay();
+    bkcore.hexgl.audio.startCountdown();
 }
 
 bkcore.hexgl.HexGL.prototype.reset = function()
@@ -126,6 +127,9 @@ bkcore.hexgl.HexGL.prototype.update = function()
 		this.gameplay.update();
 
 	this.manager.renderCurrent();
+
+    var rate = 1 + this.components.shipControls.getRealSpeedRatio() * 4;
+    bkcore.hexgl.audio.powerVehicleEngine(rate);
 }
 
 bkcore.hexgl.HexGL.prototype.init = function()

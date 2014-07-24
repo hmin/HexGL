@@ -562,6 +562,8 @@ bkcore.hexgl.ShipControls.prototype.collisionCheck = function(dt)
 			this.speed = 0;
 		}
 
+        bkcore.hexgl.audio.playCrash();
+
 		// DIRTY GAMEOVER
 		if(rCol < 128 && lCol < 128)
 		{

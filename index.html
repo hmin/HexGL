@@ -184,6 +184,7 @@
 		<script src="bkcore/hexgl/tracks/Cityscape.js"></script>
 
 		<script src="bkcore/hexgl/HexGL.js"></script>
+		<script src="bkcore/hexgl/Audio.js"></script>
 
 		<script>
 			try {
@@ -316,8 +317,12 @@
 					{
 						console.log("LOADED "+t+" : "+n+" ( "+p.loaded+" / "+p.total+" ).");
 					}
-				});
+                });
+
+                bkcore.hexgl.audio.startVehicleEngine();
       }
+
+      bkcore.hexgl.audio.startBackground();
 
       //---------------------------------------------
       // For wireless display mode
